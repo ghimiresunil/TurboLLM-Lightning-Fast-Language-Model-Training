@@ -359,15 +359,3 @@ def fast_cross_entropy_loss(logits, labels):
     )
     n_items = torch.count_nonzero(labels != -100)
     return loss.sum() / n_items
-
-if __name__ == "__main__":    
-    batch_size = 32
-    seq_len = 10
-    vocab_size = 1000
-    
-    logits = torch.randn(batch_size, seq_len, vocab_size)
-    labels = torch.randint(0, vocab_size, (batch_size, seq_len))
-    
-    loss = fast_cross_entropy_loss(logits, labels)
-    print("Cross-entropy loss:", loss.item())
-    

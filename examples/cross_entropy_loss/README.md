@@ -72,7 +72,7 @@ Chunked cross entropy forward is a technique used to efficiently compute cross e
 - $C$ : Number of chunks.
 - $\text{logits}_{ij}$ : Logits for word $i$ in chunk $j$.
 - $\text{logsumexp}_j$ : Logsumexp for chunk $j$.
-- $\text{chunk\_sum}$ : Sum of logsumexp values across all chunks.
+- ${chunk_{sum}}$ : Sum of logsumexp values across all chunks.
 
 1. **Logsumexp for Each Chunk**:
 
@@ -82,12 +82,12 @@ Chunked cross entropy forward is a technique used to efficiently compute cross e
 2. **Chunk Sum**:
 
    Compute the sum of logsumexp values across all chunks:
-   $\text{chunk\_sum} = \log \left( \sum_{j=1}^{C} e^{\text{logsumexp}_j} \right)$
+   ${chunk_{sum}} = \log \left( \sum_{j=1}^{C} e^{\text{logsumexp}_j} \right)$
 
 3. **Final Computation**:
 
    The final cross entropy loss for each word $i$ in chunk $j$ is computed as:
-   $CE_{ij} = \text{chunk\_sum} - \text{logits}_{ij}$
+   $CE_{ij} = {chunk_{sum}} - \text{logits}_{ij}$
 
 
 ### Mathematical Calculation Example
@@ -119,6 +119,8 @@ Let's follow the steps outlined for Chunked Cross Entropy Forward:
 For each chunk $j$, we compute the logsumexp:
 
 Chunk 1:
+
+
 $\text{logsumexp}_1 = \log \left( \sum_{i=1}^{4} e^{\text{logits}_{i1}} \right)$
 
 $\text{logsumexp}_1 = \log \left( e^{2.0} + e^{1.5} + e^{1.8} + e^{2.2} \right)$
@@ -130,18 +132,20 @@ $\text{logsumexp}_1 \approx \log(27.944) \approx 3.328$
 Similarly, we compute logsumexp for Chunk 2 and Chunk 3.
 
 Chunk 2:
+
 $\text{logsumexp}_2 = \log \left( \sum_{i=5}^{8} e^{\text{logits}_{i2}} \right)$
 
 Chunk 3:
+
 $\text{logsumexp}_3 = \log \left( \sum_{i=9}^{12} e^{\text{logits}_{i3}} \right)$
 
 ### Step 2: Chunk Sum
 
 We compute the sum of logsumexp values across all chunks:
 
-$\text{chunk\_sum} = \log \left( e^{\text{logsumexp}_1} + e^{\text{logsumexp}_2} + e^{\text{logsumexp}_3} \right)$
+${chunk_{sum}} = \log \left( e^{\text{logsumexp}_1} + e^{\text{logsumexp}_2} + e^{\text{logsumexp}_3} \right)$
 
-$\text{chunk\_sum} = \log \left( e^{3.328} + e^{... [truncated]
+${chunk_{sum}} = \log \left( e^{3.328} + e^{...} \right)$
 
 ## Cross Entropy Backward
 

@@ -153,7 +153,6 @@ Cross Entropy Backward is a technique used to compute the gradient of the cross 
 
 ### Mathematical Explanation
 
-
 The gradient of the cross entropy loss \(CE_i\) with respect to the logits \(x\) is denoted as $\frac{dC}{dx}$, where \(C\) is the cross entropy loss and \(i\) represents a particular example in the dataset.
 
 The cross entropy loss \(CE_i\) is given by:

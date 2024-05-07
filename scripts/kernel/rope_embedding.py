@@ -81,14 +81,14 @@ class FastRopeEmbedding(torch.autograd.Function):
     def forward(ctx, Q, cos, sin):
         cos, sin = cos.squeeze(), sin.squeeze()
         batch, seq_len, n_heads, head_dim = Q.shape
-        Q = Q.view(batch*seq_len, n_heads*head_dim)
+        Q = Q.reshape(batch*seq_len, n_heads*head_dim)
         n_rows, n_cols = Q.shape
         assert(seq_len <= cos.shape[0])
-    
+        
         # [TODO] Changing blocksize to head_dim//2 seems to have
         # some concurrency / un-deterministic issues.
         
-        BLOCK_SIZE, num_warps = calculate_settings(head_dim//2)
+        BLOCK_SIZE, num_warps = calculate_settings(head_dim//2) # (head_dim//2)
         
         # group_size = 4 # 4 or 8, too large group_size can hurt performance.
         div, mod = divmod(n_heads, ROPE_GROUP_SIZE)
@@ -108,7 +108,7 @@ class FastRopeEmbedding(torch.autograd.Function):
         ctx.n_groups = n_groups
         ctx.cos = cos
         ctx.sin = sin 
-        return Q.view(batch, seq_len, n_heads, head_dim)
+        return Q.reshape(batch, seq_len, n_heads, head_dim)
     
     @staticmethod
     def backward(ctx, dY):
@@ -129,7 +129,7 @@ class FastRopeEmbedding(torch.autograd.Function):
             BLOCK_SIZE = ctx.BLOCK_SIZE,
             num_warps  = ctx.num_warps,
         )
-        dY = dY.view(batch, seq_len, n_heads, head_dim)
+        dY = dY.reshape(batch, seq_len, n_heads, head_dim)
         return dY, None, None
     
 
